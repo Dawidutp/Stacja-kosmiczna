@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <p>Wybrana data przyjazdu: <span th:text="${datefrom}"></span></p>
+    <p>Wybrana data wyjazdu: <span th:text="${dateto}"></span></p>
+    <p>Wybrany pokój: <span th:text="${roomnumber}"></span></p>
+    <p>Cena bookingu: <span th:text="${bookingprice}"></span> zł</p>
+
+
+    <form method="post" action="/book-confirm">
+        <input type="text" name="client_name">
+        <input type="hidden" name="datefrom" th:value="${datefrom}">
+        <input type="hidden" name="dateto" th:value="${dateto}">
+        <input type="hidden" name="roomid" th:value="${roomid}">
+        <input type="submit" value="Zarezerwuj">
+    </form>
+</body>
+</html>

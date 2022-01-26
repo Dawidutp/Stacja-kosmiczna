@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <p>Zarezerowano pokój</p>
+        <p>
+            Od: <span th:text="${booking.dateFrom}"></span>&nbsp;
+            Do: <span th:text="${booking.dateTo}"></span>
+            <p>Numer zarezerwowanego pokoju: <span th:text="${booking.getRoom().RoomNumber}"></span></p>
+            <p>Koszt bookingu: <span th:text="${booking.getPrice()}"></span> zł</p>
+        </p>
+    </div>
+</body>
+</html>

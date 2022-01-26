@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking</title>
+</head>
+<body>
+    <form method="get">
+        <div>
+            <label for="datefrom">Data przyjazdu: </label>
+            <input type="date" id="datefrom" name="datefrom">
+        </div>
+        <div>
+            <label for="dateto">Data wyjazdu: </label>
+            <input type="date" id="dateto" name="dateto">
+        </div>
+        <input type="submit" value="Znajdź pokoje">
+    </form>
+
+
+    <div th:if="${datefrom}" class="booking-details">
+        <p>Wybrana data przyjazdu: <span th:text="${datefrom}"></span></p>
+        <p>Wybrana data wyjazdu: <span th:text="${dateto}"></span></p>
+
+        <div th:each="room: ${rooms}">
+            <a th:href="@{/book-room/{id}(datefrom=${datefrom}, dateto=${dateto}, id=${room.id})}">
+                Pokój numer: <span th:text="${room.RoomNumber}"></span>
+            </a>
+        </div>
+
+    </div>
+</body>
+</html>
