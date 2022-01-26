@@ -6,17 +6,15 @@
 </head>
 <body>
 
-    <p>Wybrana data przyjazdu: <span th:text="${datefrom}"></span></p>
-    <p>Wybrana data wyjazdu: <span th:text="${dateto}"></span></p>
+    <p>Wybrana data przyjazdu: <span th:text="${date}"></span></p>
     <p>Wybrany pokój: <span th:text="${roomnumber}"></span></p>
     <p>Cena bookingu: <span th:text="${bookingprice}"></span> zł</p>
 
 
-    <form method="post" action="/book-confirm">
+    <form method="get" action="/book-confirm">
         <input type="text" name="client_name">
-        <input type="hidden" name="datefrom" th:value="${datefrom}">
-        <input type="hidden" name="dateto" th:value="${dateto}">
-        <input type="hidden" name="roomid" th:value="${roomid}">
+        <input type="hidden" name="date" th:value="${date}">
+        <input type="hidden" name="serviceid" th:value="${serviceid}">
         <input type="submit" value="Zarezerwuj">
     </form>
 </body>

@@ -6,11 +6,10 @@
 </head>
 <body>
     <div>
-        <p>Zarezerowano pokój</p>
+        <p>Zarezerowano wizytę</p>
         <p>
-            Od: <span th:text="${booking.dateFrom}"></span>&nbsp;
-            Do: <span th:text="${booking.dateTo}"></span>
-            <p>Numer zarezerwowanego pokoju: <span th:text="${booking.getRoom().serviceName}"></span></p>
+            Od: <span th:text="${booking.date}"></span>&nbsp;
+            <p>Numer zarezerwowanego pokoju: <span th:text="${booking.getServices().serviceName}"></span></p>
             <p>Koszt bookingu: <span th:text="${booking.getPrice()}"></span> zł</p>
         </p>
     </div>

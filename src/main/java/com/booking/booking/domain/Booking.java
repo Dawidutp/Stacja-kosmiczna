@@ -1,8 +1,7 @@
 package com.booking.booking.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,18 +12,18 @@ import java.time.LocalDate;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Booking {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private LocalDate DateFrom;
-    private LocalDate DateTo;
+    private LocalDate Date;
     private float Price;
 
     @ManyToOne
-    private Services service;
+    private Services services;
 
     @ManyToOne
     private Client client;

@@ -1,11 +1,7 @@
 package com.booking.booking.service;
 
-import com.booking.booking.domain.Booking;
-import com.booking.booking.domain.Client;
-import com.booking.booking.domain.Services;
-import com.booking.booking.repository.BookingRepository;
-import com.booking.booking.repository.ClientRepository;
-import com.booking.booking.repository.ServicesRepository;
+import com.booking.booking.domain.*;
+import com.booking.booking.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,42 +22,48 @@ public class BookingService {
     ClientRepository clientRepository;
 
     @Autowired
-    ServicesRepository roomRepository;
+    ServicesRepository servicesRepository;
+    @Autowired
+    DiagnostaRepository diagnostaRepository;
 
+    @Autowired
+    StacjaDiagnostycznaRepository stacjaDiagnostycznaRepository;
 
-    public List<Services> getAvailableRooms(LocalDate dateFrom, LocalDate dateTo){
-        List<Long> ExcludedIds = roomRepository.getAllRomsBookedBetween(dateFrom, dateTo);
+    public List<Services> listAllServices() {
+        return servicesRepository.findAll();
+    }
+    public List<Booking> listAllBookings() {
+        return bookingRepository.findAll();}
+    public List<Services> getAvailableRooms(LocalDate dateFrom){
+        List<Long> ExcludedIds = servicesRepository.getAllRomsBookedBetween(dateFrom);
 
         if(ExcludedIds.isEmpty()) //jeżeli wszystkie pokoje wolne
-            return roomRepository.findAll(); //wypisz wszystkie
+            return servicesRepository.findAll(); //wypisz wszystkie
         else
-            return roomRepository.findAllByIdNotIn(ExcludedIds); //wypisz takie, których nie ma w zajętych, czyli wolne
+            return servicesRepository.findAllByIdNotIn(ExcludedIds); //wypisz takie, których nie ma w zajętych, czyli wolne
     }
 
     public Optional<Services> findRoomById(Long id){
-        return roomRepository.findById(id);
+        return servicesRepository.findById(id);
     }
 
-    public float CalculateBookingPrice(float RoomPrice, LocalDate dateFrom, LocalDate dateTo){
-        long amountOfDays = dateFrom.until(dateTo, ChronoUnit.DAYS);
-
-        return amountOfDays * RoomPrice;
+    public float CalculateBookingPrice(float ServicePrice){
+        return ServicePrice;
     }
 
-    public Booking createBooking(String ClientName, LocalDate dateFrom, LocalDate dateTo, Long RoomId){
+    public Booking createBooking(String ClientName, LocalDate dateFrom, Long RoomId){
         Booking b = new Booking();
 
         Client c = new Client();
         c.setName(ClientName);
         c = clientRepository.save(c);
 
-        Optional<Services> room = roomRepository.findById(RoomId);
+        Optional<Services> services = servicesRepository.findById(RoomId);
 
         b.setClient(c);
-        b.setDateFrom(dateFrom);
-        b.setDateTo(dateTo);
-        b.setPrice(CalculateBookingPrice(room.get().PricePerDay, dateFrom, dateTo));
-        b.setRoom(room.get());
+        b.setDate(dateFrom);
+        b.setPrice(CalculateBookingPrice(services.get().Price));
+        b.setServices(services.get());
 
         return bookingRepository.save(b);
     }
@@ -72,26 +74,29 @@ public class BookingService {
 
     @PostConstruct
     public String createData(){
-        Services r1 = new Services(0L, 101, 250);
-        Services r2 = new Services(0L, 102, 120);
-        Services r3 = new Services(0L, 113, 230);
-        Services r4 = new Services(0L, 215, 400);
+        Services r1 = new Services(0L, "Przegląd", 250);
+        Services r2 = new Services(0L, "Regulacja świateł", 120);
+        Services r3 = new Services(0L, "Zbieżność", 230);
+        Services r4 = new Services(0L, "Złomowanie auta", 400);
 
         Client c1 = new Client(0L, "Lukasz Szukasz");
         Client c2 = new Client(0L, "Andrzej Bob");
 
-        r1 = roomRepository.save(r1);
-        r2 = roomRepository.save(r2);
-        r3 = roomRepository.save(r3);
-        r4 = roomRepository.save(r4);
+        r1 = servicesRepository.save(r1);
+        r2 = servicesRepository.save(r2);
+        r3 = servicesRepository.save(r3);
+        r4 = servicesRepository.save(r4);
 
         c1 = clientRepository.save(c1);
         c2 = clientRepository.save(c2);
 
-        Booking b1 = new Booking(0L, LocalDate.parse("2021-06-22"), LocalDate.parse("2021-06-30"), 700, r1, c1);
-        Booking b2 = new Booking(0L, LocalDate.parse("2021-07-01"), LocalDate.parse("2021-07-12"), 1200, r3, c2);
-
+        Booking b1 = new Booking(0L, LocalDate.parse("2021-06-22"), 700, r1, c1);
+        Booking b2 = new Booking(0L, LocalDate.parse("2021-07-01"), 1200, r3, c2);
+        StacjaDiagnostyczna s1 = new StacjaDiagnostyczna(0L,"123-123-123","Stacja",true);
+        Diagnosta d1 = new Diagnosta(0L,"Marcin","Markiewicz","marmar@gmail.com","$2a$12$bCUwmF1fVWRNMt4sAd0AAOkh1Z1r4obb1.x.yL0nI4iu1/3j3K5Fq",1,"admin",s1);
         bookingRepository.saveAll(Arrays.asList(b1, b2));
+        stacjaDiagnostycznaRepository.save(s1);
+        diagnostaRepository.save(d1);
 
         return "index";
     }

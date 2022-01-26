@@ -26,48 +26,45 @@ public class BookingController {
 
     @GetMapping("/")
     public String home(
-            @RequestParam(value = "datefrom", required = false) String DateFromString,
-            @RequestParam(value = "dateto", required = false) String DateToString,
+            @RequestParam(value = "date", required = false) String DateString,
             Model model
     ){
 
-        if(DateFromString != null && DateToString != null) {
-            LocalDate DateFrom = LocalDate.parse(DateFromString);
-            LocalDate DateTo = LocalDate.parse(DateToString);
+        if(DateString != null ) {
+            LocalDate DateFrom = LocalDate.parse(DateString);
 
-            model.addAttribute("datefrom", DateFrom.toString());
-            model.addAttribute("dateto", DateTo.toString());
+            model.addAttribute("date", DateFrom.toString());
 
-            List<Services> rooms = bookingService.getAvailableRooms(DateFrom, DateTo);
+            //List<Services> rooms = bookingService.listAllServices();
 
-            model.addAttribute("rooms", rooms);
+            model.addAttribute("rooms", bookingService.listAllServices());
         }
 
         return "index";
     }
+    @GetMapping("/reservations")
+    public String home2(Model model) {
 
+        model.addAttribute("reservations", bookingService.listAllBookings());
+
+        return"reservations";
+    }
 
     @GetMapping("/book-room/{id}")
     public String bookRoom(
             @PathVariable Long id,
-            @RequestParam(value = "datefrom", required = false) String DateFromString,
-            @RequestParam(value = "dateto", required = false) String DateToString,
+            @RequestParam(value = "date", required = false) String DateString,
             Model model
     ){
 
-        model.addAttribute("datefrom", DateFromString);
-        model.addAttribute("dateto", DateToString);
-        model.addAttribute("roomid", id);
+        model.addAttribute("date", DateString);
+        model.addAttribute("serviceid", id);
 
 
         Optional<Services> room = bookingService.findRoomById(id);
 
         if(room.isPresent()){
-            float bookingPrice = bookingService.CalculateBookingPrice(
-                    room.get().PricePerDay,
-                    LocalDate.parse(DateFromString),
-                    LocalDate.parse(DateToString)
-            );
+            float bookingPrice = bookingService.CalculateBookingPrice(room.get().Price);
             model.addAttribute("bookingprice", bookingPrice);
             model.addAttribute("roomnumber", room.get().serviceName);
 
@@ -78,17 +75,15 @@ public class BookingController {
         return "redirect:/";
     }
 
-    @PostMapping("/book-confirm")
+    @GetMapping("/book-confirm")
     public String bookConfirm(
             @RequestParam("client_name") String ClientName,
-            @RequestParam("datefrom") String DateFromString,
-            @RequestParam("dateto") String DateToString,
-            @RequestParam("roomid") Long RoomId
+            @RequestParam("date") String DateFromString,
+            @RequestParam("serviceid") Long RoomId
     ) {
-        LocalDate DateFrom = LocalDate.parse(DateFromString);
-        LocalDate DateTo = LocalDate.parse(DateToString);
+        LocalDate Date = LocalDate.parse(DateFromString);
 
-        Booking booking = bookingService.createBooking(ClientName, DateFrom, DateTo, RoomId);
+        Booking booking = bookingService.createBooking(ClientName, Date, RoomId);
 
         return "redirect:/book-confirm/"+booking.getId();
     }

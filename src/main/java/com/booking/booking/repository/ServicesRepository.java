@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ServicesRepository extends JpaRepository<Services, Long> {
 
-    @Query("select b.service.id from Booking b where b.DateFrom between ?1 and ?2 or b.DateTo between ?1 and ?2")
-    public List<Long> getAllRomsBookedBetween(LocalDate dateFrom, LocalDate dateTo);
+    @Query("select b.services.id from Booking b where b.Date = ?1 ")
+    public List<Long> getAllRomsBookedBetween(LocalDate dateFrom);
 
     public List<Services> findAllByIdNotIn(List<Long> ids);
 }

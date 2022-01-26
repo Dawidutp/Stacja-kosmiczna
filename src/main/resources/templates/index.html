@@ -7,24 +7,19 @@
 <body>
     <form method="get">
         <div>
-            <label for="datefrom">Data przyjazdu: </label>
-            <input type="date" id="datefrom" name="datefrom">
+            <label for="date">Data przyjazdu: </label>
+            <input type="date" id="date" name="date">
         </div>
-        <div>
-            <label for="dateto">Data wyjazdu: </label>
-            <input type="date" id="dateto" name="dateto">
-        </div>
-        <input type="submit" value="Znajdź pokoje">
+        <input type="submit" value="Znajdź serwisy">
     </form>
 
 
-    <div th:if="${datefrom}" class="booking-details">
-        <p>Wybrana data przyjazdu: <span th:text="${datefrom}"></span></p>
-        <p>Wybrana data wyjazdu: <span th:text="${dateto}"></span></p>
+    <div th:if="${date}" class="booking-details">
+        <p>Wybrana data: <span th:text="${date}"></span></p>
 
         <div th:each="room: ${rooms}">
-            <a th:href="@{/book-room/{id}(datefrom=${datefrom}, dateto=${dateto}, id=${room.id})}">
-                Pokój numer: <span th:text="${room.RoomNumber}"></span>
+            <a th:href="@{/book-room/{id}(date=${date}, id=${room.id})}">
+                Usługa: <span th:text="${room.serviceName}"></span>
             </a>
         </div>
 
