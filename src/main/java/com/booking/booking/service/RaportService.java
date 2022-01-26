@@ -22,7 +22,7 @@ public class RaportService {
 
         return bookings
                 .stream()
-                .map(booking -> new Raport(booking.getRoom().RoomNumber, booking.getDateFrom(), booking.getDateTo()))
+                .map(booking -> new Raport(booking.getService().getServiceName(), booking.getDateFrom(), booking.getDateTo()))
                 .collect(Collectors.toList());
     }
 }

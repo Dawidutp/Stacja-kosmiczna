@@ -24,7 +24,7 @@ public class Booking {
     private float Price;
 
     @ManyToOne
-    private Room room;
+    private Services service;
 
     @ManyToOne
     private Client client;

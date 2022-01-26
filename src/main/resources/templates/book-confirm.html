@@ -10,7 +10,7 @@
         <p>
             Od: <span th:text="${booking.dateFrom}"></span>&nbsp;
             Do: <span th:text="${booking.dateTo}"></span>
-            <p>Numer zarezerwowanego pokoju: <span th:text="${booking.getRoom().RoomNumber}"></span></p>
+            <p>Numer zarezerwowanego pokoju: <span th:text="${booking.getRoom().serviceName}"></span></p>
             <p>Koszt bookingu: <span th:text="${booking.getPrice()}"></span> zł</p>
         </p>
     </div>

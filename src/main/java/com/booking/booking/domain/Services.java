@@ -13,12 +13,12 @@ import javax.persistence.Id;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room {
+public class Services {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    public int RoomNumber;
+    public int serviceName;
     public float PricePerDay;
 }

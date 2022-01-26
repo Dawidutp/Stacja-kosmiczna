@@ -1,11 +1,7 @@
 package com.booking.booking.controller;
 
 import com.booking.booking.domain.Booking;
-import com.booking.booking.domain.Client;
-import com.booking.booking.domain.Room;
-import com.booking.booking.repository.BookingRepository;
-import com.booking.booking.repository.ClientRepository;
-import com.booking.booking.repository.RoomRepository;
+import com.booking.booking.domain.Services;
 import com.booking.booking.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-import javax.annotation.PostConstruct;
-import java.awt.print.Book;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +38,7 @@ public class BookingController {
             model.addAttribute("datefrom", DateFrom.toString());
             model.addAttribute("dateto", DateTo.toString());
 
-            List<Room> rooms = bookingService.getAvailableRooms(DateFrom, DateTo);
+            List<Services> rooms = bookingService.getAvailableRooms(DateFrom, DateTo);
 
             model.addAttribute("rooms", rooms);
         }
@@ -67,7 +60,7 @@ public class BookingController {
         model.addAttribute("roomid", id);
 
 
-        Optional<Room> room = bookingService.findRoomById(id);
+        Optional<Services> room = bookingService.findRoomById(id);
 
         if(room.isPresent()){
             float bookingPrice = bookingService.CalculateBookingPrice(
@@ -76,7 +69,7 @@ public class BookingController {
                     LocalDate.parse(DateToString)
             );
             model.addAttribute("bookingprice", bookingPrice);
-            model.addAttribute("roomnumber", room.get().RoomNumber);
+            model.addAttribute("roomnumber", room.get().serviceName);
 
             return "booking";
         }

@@ -2,10 +2,10 @@ package com.booking.booking.service;
 
 import com.booking.booking.domain.Booking;
 import com.booking.booking.domain.Client;
-import com.booking.booking.domain.Room;
+import com.booking.booking.domain.Services;
 import com.booking.booking.repository.BookingRepository;
 import com.booking.booking.repository.ClientRepository;
-import com.booking.booking.repository.RoomRepository;
+import com.booking.booking.repository.ServicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +26,10 @@ public class BookingService {
     ClientRepository clientRepository;
 
     @Autowired
-    RoomRepository roomRepository;
+    ServicesRepository roomRepository;
 
 
-    public List<Room> getAvailableRooms(LocalDate dateFrom, LocalDate dateTo){
+    public List<Services> getAvailableRooms(LocalDate dateFrom, LocalDate dateTo){
         List<Long> ExcludedIds = roomRepository.getAllRomsBookedBetween(dateFrom, dateTo);
 
         if(ExcludedIds.isEmpty()) //jeżeli wszystkie pokoje wolne
@@ -38,7 +38,7 @@ public class BookingService {
             return roomRepository.findAllByIdNotIn(ExcludedIds); //wypisz takie, których nie ma w zajętych, czyli wolne
     }
 
-    public Optional<Room> findRoomById(Long id){
+    public Optional<Services> findRoomById(Long id){
         return roomRepository.findById(id);
     }
 
@@ -55,7 +55,7 @@ public class BookingService {
         c.setName(ClientName);
         c = clientRepository.save(c);
 
-        Optional<Room> room = roomRepository.findById(RoomId);
+        Optional<Services> room = roomRepository.findById(RoomId);
 
         b.setClient(c);
         b.setDateFrom(dateFrom);
@@ -72,10 +72,10 @@ public class BookingService {
 
     @PostConstruct
     public String createData(){
-        Room r1 = new Room(0L, 101, 250);
-        Room r2 = new Room(0L, 102, 120);
-        Room r3 = new Room(0L, 113, 230);
-        Room r4 = new Room(0L, 215, 400);
+        Services r1 = new Services(0L, 101, 250);
+        Services r2 = new Services(0L, 102, 120);
+        Services r3 = new Services(0L, 113, 230);
+        Services r4 = new Services(0L, 215, 400);
 
         Client c1 = new Client(0L, "Lukasz Szukasz");
         Client c2 = new Client(0L, "Andrzej Bob");
